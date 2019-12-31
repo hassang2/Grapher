@@ -10,7 +10,7 @@ using System.Collections;
 
 
 [AddComponentMenu("Camera-Control/3dsMax Camera Style")]
-public class Camera : MonoBehaviour {
+public class CamControls : MonoBehaviour {
    public Transform target;
    public Vector3 targetOffset;
    public float distance = 5.0f;
@@ -96,7 +96,7 @@ public class Camera : MonoBehaviour {
       // affect the desired Zoom distance if we roll the scrollwheel
       desiredDistance -= Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * zoomRate * Mathf.Abs(desiredDistance);
       //clamp the zoom min/max
-      desiredDistance = Mathf.Clamp(desiredDistance, minDistance, maxDistance);
+      //desiredDistance = Mathf.Clamp(desiredDistance, minDistance, maxDistance);
       // For smoothing of the zoom, lerp distance
       currentDistance = Mathf.Lerp(currentDistance, desiredDistance, Time.deltaTime * zoomDampening);
 

@@ -718,9 +718,9 @@ MonoBehaviour:
   targetOffset: {x: 0, y: 0, z: 0}
   distance: 5
   maxDistance: 100
-  minDistance: 1
-  xSpeed: 200
-  ySpeed: 200
+  minDistance: 0.1
+  xSpeed: 300
+  ySpeed: 300
   yMinLimit: -80
   yMaxLimit: 80
   zoomRate: 50

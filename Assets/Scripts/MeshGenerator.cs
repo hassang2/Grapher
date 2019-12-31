@@ -6,13 +6,19 @@ using org.mariuszgromada.math.mxparser;
 public enum ShadingMode {
    heightmap
 }
+
+public struct PlotMeshT {
+   public Mesh topMesh;
+   public Mesh botMesh;
+   public List<Vector3> framePositions;
+}
 public static class MeshGenerator {
 
    /*
     *
     * smoothness = numX + numY
     */
-   public static List<Mesh> MakePlot(GameObject obj, float minX, float maxX, float minZ, float maxZ, int smoothness, ShadingMode mode) {
+   public static PlotMeshT MakePlot(GameObject obj, float minX, float maxX, float minZ, float maxZ, int smoothness, ShadingMode mode) {
       float diffX = maxX - minX;
       float diffZ = maxZ - minZ;
 
@@ -33,7 +39,6 @@ public static class MeshGenerator {
       for (int i = 0; i <= numX; i++) {
          for (int j = 0; j <= numZ; j++) {
             Vector3 newVertex = obj.transform.InverseTransformVector(new Vector3(curX, (float)func.calculate(curX, curZ), curZ));
-            
             vertices.Add(newVertex);
 
             colors.Add(GetColor(newVertex, mode));
@@ -85,7 +90,70 @@ public static class MeshGenerator {
       bot.SetNormals(normals);
       bot.SetColors(colors);
 
-      return new List<Mesh>() { top, bot };
+      PlotMeshT ret = new PlotMeshT {
+         topMesh = top,
+         botMesh = bot,
+         framePositions = MakeFrame(vertices, numX, numZ)
+      };
+
+      return ret;
+   }
+
+   static List<Vector3> MakeFrame(List<Vector3> vertices, int numX, int numZ) {
+      List<Vector3> frame = new List<Vector3>();
+      
+      int index;
+
+      // a horizontal zig-zag
+      for (int i = 0; i <= numX; i++) {
+         for (int j = 0; j <= numZ; j++) {
+            index = i * (numZ + 1) + j;
+            frame.Add(vertices[index]);
+         }
+         i++;
+         if (i == numX + 1) break;
+
+         for (int j = numZ; j >= 0; j--) {
+            index = i * (numZ + 1) + j;
+            frame.Add(vertices[index]);
+         }
+      }
+
+      //a vertical zig - zag
+      //if (numZ % 2 == 0) {
+      //   for (int i = numZ; i >= 0; i--) {
+      //      for (int j = numX; j >= 0; j--) {
+      //         index = i * (numZ + 1) + j;
+      //         frame.Add(vertices[index]);
+      //      }
+
+      //      i--;
+      //      if (i == -1) break;
+
+      //      for (int j = 0; j <= numX; j++) {
+      //         index = i * (numZ + 1) + j;
+      //         frame.Add(vertices[index]);
+      //      }
+
+      //   }
+      //} else {
+      //   for (int i = 0; i <= numZ; i++) {
+      //      for (int j = 0; j <= numX; j++) {
+      //         index = i * (numZ + 1) + j;
+      //         frame.Add(vertices[index]);
+      //      }
+
+      //      i++;
+      //      if (i == numX + 1) break;
+
+      //      for (int j = numX; j >= 0; j++) {
+      //         index = i * (numZ + 1) + j;
+      //         frame.Add(vertices[index]);
+      //      }
+      //   }
+      //}
+
+      return frame;
    }
 
 

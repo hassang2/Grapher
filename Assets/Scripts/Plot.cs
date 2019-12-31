@@ -12,19 +12,28 @@ public class Plot : MonoBehaviour {
    Mesh topMesh;
    Mesh botMesh;
 
+   LineRenderer frame;
+
    // Start is called before the first frame update
    void Awake() {
       topMesh = transform.Find("Mesh/Top").GetComponent<MeshFilter>().mesh;
       botMesh = transform.Find("Mesh/Bot").GetComponent<MeshFilter>().mesh;
+
+      frame = transform.Find("Mesh").GetComponent<LineRenderer>();
    }
 
    public void Display() {
       equation = Parser.Parse(input.text);
 
-      List<Mesh> meshes = MeshGenerator.MakePlot(gameObject, -10, 10, -10, 10, 300, ShadingMode.heightmap);
+      PlotMeshT plotMesh = MeshGenerator.MakePlot(gameObject, -10, 10, -10, 10, 100, ShadingMode.heightmap);
 
-      MeshGenerator.CopyMesh(topMesh, meshes[0]);
-      MeshGenerator.CopyMesh(botMesh, meshes[1]);
+      MeshGenerator.CopyMesh(topMesh, plotMesh.topMesh);
+      MeshGenerator.CopyMesh(botMesh, plotMesh.botMesh);
+
+      frame.positionCount = plotMesh.framePositions.Count;
+      frame.SetPositions(plotMesh.framePositions.ToArray());
+
+      transform.Find("Mesh/Top").GetComponent<WireFrame>().Frame();
    }
 
 }
