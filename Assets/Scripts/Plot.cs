@@ -18,25 +18,13 @@ public class Plot : MonoBehaviour {
       botMesh = transform.Find("Mesh/Bot").GetComponent<MeshFilter>().mesh;
    }
 
-   // Update is called once per frame
-   void Update() {
-      
-   }
-
    public void Display() {
       equation = Parser.Parse(input.text);
 
-      List<Mesh> meshes = MeshGenerator.MakePlot(gameObject, -2, 2, -2, 2, 100);
+      List<Mesh> meshes = MeshGenerator.MakePlot(gameObject, -10, 10, -10, 10, 300, ShadingMode.heightmap);
 
-      CopyMesh(topMesh, meshes[0]);
-      CopyMesh(botMesh, meshes[1]);
-
+      MeshGenerator.CopyMesh(topMesh, meshes[0]);
+      MeshGenerator.CopyMesh(botMesh, meshes[1]);
    }
 
-   void CopyMesh(Mesh dest, Mesh src) {
-      dest.Clear();
-      dest.vertices = src.vertices;
-      dest.triangles = src.triangles;
-      dest.normals = src.normals;
-   }
 }

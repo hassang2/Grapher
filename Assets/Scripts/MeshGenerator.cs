@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using org.mariuszgromada.math.mxparser;
 
+public enum ShadingMode {
+   heightmap
+}
 public static class MeshGenerator {
 
    /*
     *
     * smoothness = numX + numY
     */
-   public static List<Mesh> MakePlot(GameObject obj, float minX, float maxX, float minZ, float maxZ, int smoothness) {
+   public static List<Mesh> MakePlot(GameObject obj, float minX, float maxX, float minZ, float maxZ, int smoothness, ShadingMode mode) {
       float diffX = maxX - minX;
       float diffZ = maxZ - minZ;
 
@@ -24,13 +27,16 @@ public static class MeshGenerator {
 
       List<Vector3> vertices = new List<Vector3>();
       List<int> faces = new List<int>();
+      List<Color32> colors = new List<Color32>();
 
       Function func = obj.GetComponent<Plot>().equation;
       for (int i = 0; i <= numX; i++) {
          for (int j = 0; j <= numZ; j++) {
             Vector3 newVertex = obj.transform.InverseTransformVector(new Vector3(curX, (float)func.calculate(curX, curZ), curZ));
-            //Vector3 newVertex = obj.transform.InverseTransformVector(new Vector3(curX, curX * curZ, curZ));
+            
             vertices.Add(newVertex);
+
+            colors.Add(GetColor(newVertex, mode));
 
             curX += deltaX;
          }
@@ -64,7 +70,7 @@ public static class MeshGenerator {
       top.SetVertices(vertices);
       top.SetTriangles(faces, 0);
       top.SetNormals(normals);
-
+      top.SetColors(colors);
 
       Mesh bot = new Mesh();
       bot.Clear();
@@ -77,7 +83,33 @@ public static class MeshGenerator {
          normals[i] = -normals[i];
 
       bot.SetNormals(normals);
+      bot.SetColors(colors);
 
       return new List<Mesh>() { top, bot };
    }
+
+
+   public static void CopyMesh(Mesh dest, Mesh src) {
+      dest.Clear();
+      dest.vertices = src.vertices;
+      dest.triangles = src.triangles;
+      dest.normals = src.normals;
+      dest.colors = src.colors;
+   }
+
+   static Color32 GetColor(Vector3 vertex, ShadingMode mode) {
+      //if (mode == ShadingMode.heightmap)
+         return HeightmapColor(vertex);
+
+      //return new Color32(255, 255, 255, 255);
+   }
+
+   static Color32 HeightmapColor(Vector3 vertex) {
+      float h = 0.7f - vertex.y / 20.0f;
+      h = vertex.x + vertex.y + vertex.z;
+      h /= 20.0f;
+      Mathf.Clamp(h, 0.3f, 0.7f);
+      return Color.HSVToRGB(h, 1.0f, 0.5f);
+   }
+
 }

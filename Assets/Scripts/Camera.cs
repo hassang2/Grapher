@@ -82,14 +82,14 @@ public class Camera : MonoBehaviour {
 
          rotation = Quaternion.Lerp(currentRotation, desiredRotation, Time.deltaTime * zoomDampening);
          transform.rotation = rotation;
+      } else if(Input.GetMouseButton(1)) {
+         float xMove = Input.GetAxis("Mouse X");
+         float yMove = Input.GetAxis("Mouse Y");
+
+         Vector3 move = (currentRotation * Vector3.left).normalized * xMove + (currentRotation * Vector3.down).normalized * yMove;
+
+         target.Translate(move); 
       }
-      // otherwise if middle mouse is selected, we pan by way of transforming the target in screenspace
-      //else if (Input.GetMouseButton(1)) {
-      //   //grab the rotation of the camera so we can move in a psuedo local XY space
-      //   target.rotation = transform.rotation;
-      //   target.Translate(Vector3.right * -Input.GetAxis("Mouse X") * panSpeed);
-      //   target.Translate(transform.up * -Input.GetAxis("Mouse Y") * panSpeed, Space.World);
-      //}
 
       ////////Orbit Position
 
@@ -103,13 +103,5 @@ public class Camera : MonoBehaviour {
       // calculate position based on the new currentDistance 
       position = target.position - (rotation * Vector3.forward * currentDistance + targetOffset);
       transform.position = position;
-   }
-
-   private static float ClampAngle(float angle, float min, float max) {
-      if (angle < -360)
-         angle += 360;
-      if (angle > 360)
-         angle -= 360;
-      return Mathf.Clamp(angle, min, max);
    }
 }
