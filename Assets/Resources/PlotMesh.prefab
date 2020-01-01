@@ -100,7 +100,7 @@ MonoBehaviour:
   ZWrite: 1
   AWrite: 1
   blend: 1
-  lineWidth: 20
+  lineWidth: 30
   size: 0
   lineMaterial: {fileID: 0}
   shader: {fileID: 4800000, guid: b812d17a7134a1b48b000c1f7e3fdce4, type: 3}
