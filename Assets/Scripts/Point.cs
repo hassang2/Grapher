@@ -18,6 +18,11 @@ public class Point : MonoBehaviour {
    }
 
    void Update() {
+      UpdateSize();
+      
+   }
+
+   void UpdateSize() {
       float scale = Vector3.Distance(camera.transform.position, transform.position) * size;
 
       transform.localScale = new Vector3(scale, scale, scale);

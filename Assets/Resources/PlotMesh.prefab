@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8704587468545238394}
   - component: {fileID: 8704587468545238279}
   - component: {fileID: 8704587468545238392}
-  - component: {fileID: 8993234433629795205}
+  - component: {fileID: 614030596038867796}
   m_Layer: 0
   m_Name: Top
   m_TagString: Untagged
@@ -79,7 +79,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &8993234433629795205
+--- !u!114 &614030596038867796
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -100,7 +100,7 @@ MonoBehaviour:
   ZWrite: 1
   AWrite: 1
   blend: 1
-  lineWidth: 30
+  lineWidth: 1
   size: 0
   lineMaterial: {fileID: 0}
   shader: {fileID: 4800000, guid: b812d17a7134a1b48b000c1f7e3fdce4, type: 3}

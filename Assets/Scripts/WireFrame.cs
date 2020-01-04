@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WireFrame : MonoBehaviour {
+public class Wireframe : MonoBehaviour {
 
    public bool render_mesh_normaly = true;
    public bool render_lines_1st = false;
@@ -20,6 +20,8 @@ public class WireFrame : MonoBehaviour {
    public Material lineMaterial;
    //private MeshRenderer meshRenderer; 
    [SerializeField] Shader shader;
+
+   [SerializeField] float hoverOffset = 0.01f;
 
 
    public void Init() {
@@ -70,7 +72,7 @@ public class WireFrame : MonoBehaviour {
       GL.Vertex(p2 - perpendicular);
    }
 
-   Vector3 to_world(Vector3 vec) {
+   Vector3 ToWorld(Vector3 vec) {
       return gameObject.transform.TransformPoint(vec);
    }
 
@@ -85,7 +87,7 @@ public class WireFrame : MonoBehaviour {
 
       GetComponent<Renderer>().enabled = render_mesh_normaly;
       if (lines == null || lines.Length < lineWidth) {
-         print("No lines");
+         //print("No lines");
       } else {
          lineMaterial.SetPass(0);
          GL.Color(lineColor);
@@ -93,9 +95,9 @@ public class WireFrame : MonoBehaviour {
          if (lineWidth == 1) {
             GL.Begin(GL.LINES);
             for (int i = 0; i + 2 < lines.Length; i += 3) {
-               Vector3 vec1 = to_world(lines[i]);
-               Vector3 vec2 = to_world(lines[i + 1]);
-               Vector3 vec3 = to_world(lines[i + 2]);
+               Vector3 vec1 = ToWorld(lines[i]) + new Vector3(0, hoverOffset, 0);
+               Vector3 vec2 = ToWorld(lines[i + 1]) + new Vector3(0, hoverOffset, 0);
+               Vector3 vec3 = ToWorld(lines[i + 2]) + new Vector3(0, hoverOffset, 0);
                if (render_lines_1st) {
                   GL.Vertex(vec1);
                   GL.Vertex(vec2);
@@ -112,9 +114,9 @@ public class WireFrame : MonoBehaviour {
          } else {
             GL.Begin(GL.QUADS);
             for (int i = 0; i + 2 < lines.Length; i += 3) {
-               Vector3 vec1 = to_world(lines[i]);
-               Vector3 vec2 = to_world(lines[i + 1]);
-               Vector3 vec3 = to_world(lines[i + 2]);
+               Vector3 vec1 = ToWorld(lines[i]);
+               Vector3 vec2 = ToWorld(lines[i + 1]);
+               Vector3 vec3 = ToWorld(lines[i + 2]);
                if (render_lines_1st) DrawQuad(vec1, vec2);
                if (render_lines_2nd) DrawQuad(vec2, vec3);
                if (render_lines_3rd) DrawQuad(vec3, vec1);
