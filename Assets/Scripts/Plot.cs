@@ -33,7 +33,7 @@ public class Plot : MonoBehaviour {
       frame.positionCount = plotMesh.framePositions.Count;
       frame.SetPositions(plotMesh.framePositions.ToArray());
 
-      transform.Find("Mesh/Top").GetComponent<Wireframe>().Frame();
+      transform.Find("Mesh/Top").GetComponent<Wireframe>().Init(plotMesh.topMesh.vertices, 50, 50);
    }
 
 }

@@ -94,8 +94,8 @@ MonoBehaviour:
   render_mesh_normaly: 1
   render_lines_1st: 1
   render_lines_2nd: 1
-  render_lines_3rd: 0
-  lineColor: {r: 0, g: 1, b: 1, a: 1}
+  render_lines_3rd: 1
+  lineColor: {r: 0.990566, g: 0.45375946, b: 0, a: 1}
   backgroundColor: {r: 0, g: 0.5, b: 0.5, a: 1}
   ZWrite: 1
   AWrite: 1
@@ -104,6 +104,7 @@ MonoBehaviour:
   size: 0
   lineMaterial: {fileID: 0}
   shader: {fileID: 4800000, guid: b812d17a7134a1b48b000c1f7e3fdce4, type: 3}
+  hoverOffset: 0.01
 --- !u!1 &8704587468573376460
 GameObject:
   m_ObjectHideFlags: 0

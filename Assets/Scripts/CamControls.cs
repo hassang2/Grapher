@@ -1,9 +1,5 @@
 ﻿//
-//Filename: maxCamera.cs
-//
 // original: http://www.unifycommunity.com/wiki/index.php?title=MouseOrbitZoom
-//
-// --01-18-2010 - create temporary target, if none supplied at start
 
 using UnityEngine;
 using System.Collections;

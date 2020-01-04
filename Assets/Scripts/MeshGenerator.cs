@@ -84,7 +84,7 @@ public static class MeshGenerator {
       faces.Reverse();
       bot.SetTriangles(faces, 0);
 
-      for (int i = 0; i < normals.Count; i++) 
+      for (int i = 0; i < normals.Count; i++)
          normals[i] = -normals[i];
 
       bot.SetNormals(normals);

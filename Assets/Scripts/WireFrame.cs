@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
+public enum WireframeMode {
+   Full,
+   Grid,
+   Off
+}
 
 public class Wireframe : MonoBehaviour {
 
    public bool render_mesh_normaly = true;
-   public bool render_lines_1st = false;
-   public bool render_lines_2nd = false;
-   public bool render_lines_3rd = false;
+
    public Color lineColor = new Color(0.0f, 1.0f, 1.0f);
    public Color backgroundColor = new Color(0.0f, 0.5f, 0.5f);
-   public bool ZWrite = true;
-   public bool AWrite = true;
-   public bool blend = true;
+
    public float lineWidth = 3;
    public int size = 0;
 
@@ -22,10 +25,18 @@ public class Wireframe : MonoBehaviour {
    [SerializeField] Shader shader;
 
    [SerializeField] float hoverOffset = 0.01f;
+   [SerializeField] WireframeMode frameMode = WireframeMode.Grid;
 
+   bool shouldDraw = false;
 
    public void Init() {
       Start();
+   }
+
+   public void Init(Vector3[] v, int x, int z) {
+      Start();
+      SetParameters(v, x, z);
+      shouldDraw = true;
    }
    void Start() {
       //meshRenderer = gameObject.GetComponent<MeshRenderer>();
@@ -76,40 +87,141 @@ public class Wireframe : MonoBehaviour {
       return gameObject.transform.TransformPoint(vec);
    }
 
-   bool shouldUpdate = false;
-   public void Frame() {
-      Init();
-      shouldUpdate = true;
+   Vector3[] vertices;
+   int numX;
+   int numZ;
+
+   void SetParameters(Vector3[] v, int x, int z) {
+      vertices = v;
+      numX = x;
+      numZ = z;
    }
 
    void OnRenderObject() {
-      //if (!shouldUpdate) return;
-
       GetComponent<Renderer>().enabled = render_mesh_normaly;
+
+      if (!shouldDraw)
+         return;
+
+      if (frameMode == WireframeMode.Full)
+         FullWireframe();
+      else if (frameMode == WireframeMode.Grid)
+         GridWireframe();
+   }
+   void GridWireframe() {
+      int index;
+
+      // a horizontal zig-zag
+      lineMaterial.SetPass(0);
+      GL.Begin(GL.LINES);
+      GL.Color(lineColor);
+
+      Vector3 last = Vector3.zero;
+
+      for (int i = 0; i <= numX; i++) {
+         for (int j = 0; j <= numZ; j++) {
+            index = i * (numZ + 1) + j;
+            if (i == 0 && j == 0)
+               last = vertices[index];
+            else {
+               Vector3 newPoint = ToWorld(vertices[index]);
+               GL.Vertex(last);
+               GL.Vertex(newPoint);
+
+               last = newPoint;
+            }
+         }
+         i++;
+         if (i == numX + 1) break;
+
+         for (int j = numZ; j >= 0; j--) {
+            index = i * (numZ + 1) + j;
+            Vector3 newPoint = ToWorld(vertices[index]);
+            GL.Vertex(last);
+            GL.Vertex(newPoint);
+
+            last = newPoint;
+         }
+      }
+
+
+      //a vertical zig - zag
+      if (numZ % 2 == 0) {
+         for (int i = numZ; i >= 0; i--) {
+            for (int j = numX; j >= 0; j--) {
+               index = j * (numZ + 1) + i;
+               Vector3 newPoint = ToWorld(vertices[index]);
+               GL.Vertex(last);
+               GL.Vertex(newPoint);
+
+               last = newPoint;
+            }
+
+            i--;
+            if (i == -1) break;
+
+            for (int j = 0; j <= numX; j++) {
+               index = j * (numZ + 1) + i;
+               Vector3 newPoint = ToWorld(vertices[index]);
+               GL.Vertex(last);
+               GL.Vertex(newPoint);
+
+               last = newPoint;
+            }
+
+         }
+      } else {
+         for (int i = 0; i <= numZ; i++) {
+            for (int j = 0; j <= numX; j++) {
+               index = j * (numZ + 1) + i;
+               Vector3 newPoint = ToWorld(vertices[index]);
+               GL.Vertex(last);
+               GL.Vertex(newPoint);
+
+               last = newPoint;
+            }
+
+            i++;
+            if (i == numX + 1) break;
+
+            for (int j = numX; j >= 0; j++) {
+               index = j * (numZ + 1) + i;
+               Vector3 newPoint = ToWorld(vertices[index]);
+               GL.Vertex(last);
+               GL.Vertex(newPoint);
+
+               last = newPoint;
+            }
+         }
+      }
+
+      GL.End();
+   }
+
+   void FullWireframe() {
       if (lines == null || lines.Length < lineWidth) {
          //print("No lines");
       } else {
          lineMaterial.SetPass(0);
-         GL.Color(lineColor);
+         
 
          if (lineWidth == 1) {
             GL.Begin(GL.LINES);
+            GL.Color(lineColor);
             for (int i = 0; i + 2 < lines.Length; i += 3) {
                Vector3 vec1 = ToWorld(lines[i]) + new Vector3(0, hoverOffset, 0);
                Vector3 vec2 = ToWorld(lines[i + 1]) + new Vector3(0, hoverOffset, 0);
                Vector3 vec3 = ToWorld(lines[i + 2]) + new Vector3(0, hoverOffset, 0);
-               if (render_lines_1st) {
-                  GL.Vertex(vec1);
-                  GL.Vertex(vec2);
-               }
-               if (render_lines_2nd) {
-                  GL.Vertex(vec2);
-                  GL.Vertex(vec3);
-               }
-               if (render_lines_3rd) {
-                  GL.Vertex(vec3);
-                  GL.Vertex(vec1);
-               }
+
+               GL.Vertex(vec1);
+               GL.Vertex(vec2);
+
+               GL.Vertex(vec2);
+               GL.Vertex(vec3);
+
+               GL.Vertex(vec3);
+               GL.Vertex(vec1);
+
             }
          } else {
             GL.Begin(GL.QUADS);
@@ -117,12 +229,13 @@ public class Wireframe : MonoBehaviour {
                Vector3 vec1 = ToWorld(lines[i]);
                Vector3 vec2 = ToWorld(lines[i + 1]);
                Vector3 vec3 = ToWorld(lines[i + 2]);
-               if (render_lines_1st) DrawQuad(vec1, vec2);
-               if (render_lines_2nd) DrawQuad(vec2, vec3);
-               if (render_lines_3rd) DrawQuad(vec3, vec1);
+               DrawQuad(vec1, vec2);
+               DrawQuad(vec2, vec3);
+               DrawQuad(vec3, vec1);
             }
          }
          GL.End();
       }
    }
+
 }
