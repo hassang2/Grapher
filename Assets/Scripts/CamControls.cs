@@ -24,10 +24,7 @@ public class CamControls : MonoBehaviour {
    private float yDeg = 0.0f;
    private float currentDistance;
    private float desiredDistance;
-   private Quaternion currentRotation;
    private Quaternion desiredRotation;
-   private Quaternion rotation;
-   private Vector3 position;
 
    void Start() { Init(); }
    void OnEnable() { Init(); }
@@ -44,10 +41,6 @@ public class CamControls : MonoBehaviour {
       currentDistance = distance;
       desiredDistance = distance;
 
-      //be sure to grab the current rotations as starting points.
-      position = transform.position;
-      rotation = transform.rotation;
-      currentRotation = transform.rotation;
       desiredRotation = transform.rotation;
 
       xDeg = Vector3.Angle(Vector3.right, transform.right);
@@ -58,46 +51,35 @@ public class CamControls : MonoBehaviour {
     * Camera logic on LateUpdate to only update after all character movement logic has been handled. 
     */
    void LateUpdate() {
-      // If Control and Alt and Middle button? ZOOM!
-      if (Input.GetMouseButton(1) && Input.GetKey(KeyCode.LeftAlt) && Input.GetKey(KeyCode.LeftControl)) {
-         //desiredDistance -= Input.GetAxis("Mouse Y") * Time.deltaTime * zoomRate * 0.125f * Mathf.Abs(desiredDistance);
-      }
-      // ORBIT
-      else if (Input.GetMouseButton(0)) {
+      if (Input.GetMouseButton(0)) {
          xDeg += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
          yDeg -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
 
-         ////////OrbitAngle
-
-         //Clamp the vertical axis for the orbit
-         //yDeg = ClampAngle(yDeg, yMinLimit, yMaxLimit);
-
          // set camera rotation 
          desiredRotation = Quaternion.Euler(yDeg, xDeg, 0);
-         currentRotation = transform.rotation;
+         //desiredRotation = Quaternion.rot
 
-         rotation = Quaternion.Lerp(currentRotation, desiredRotation, Time.deltaTime * zoomDampening);
-         transform.rotation = rotation;
       } else if(Input.GetMouseButton(1)) {
          float xMove = Input.GetAxis("Mouse X");
          float yMove = Input.GetAxis("Mouse Y");
 
-         Vector3 move = (currentRotation * Vector3.left).normalized * xMove + (currentRotation * Vector3.down).normalized * yMove;
+         Vector3 move = (transform.rotation * Vector3.left).normalized * xMove + (transform.rotation * Vector3.down).normalized * yMove;
 
          target.Translate(move); 
       }
 
-      ////////Orbit Position
+      // Apply rotation
+      transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, Time.deltaTime * zoomDampening);
 
-      // affect the desired Zoom distance if we roll the scrollwheel
+      // Zooming
       desiredDistance -= Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * zoomRate * Mathf.Abs(desiredDistance);
-      //clamp the zoom min/max
-      //desiredDistance = Mathf.Clamp(desiredDistance, minDistance, maxDistance);
-      // For smoothing of the zoom, lerp distance
+
+      //if (Mathf.Abs(desiredDistance - currentDistance) <= 0.01f) {
+      //   target.Translate((target.position - transform.position) * Mathf.Sign(desiredDistance - currentDistance));
+      //}
       currentDistance = Mathf.Lerp(currentDistance, desiredDistance, Time.deltaTime * zoomDampening);
 
-      // calculate position based on the new currentDistance 
-      position = target.position - (rotation * Vector3.forward * currentDistance + targetOffset);
-      transform.position = position;
+      // calculate position based on the new currentDistance
+      transform.position = target.position - (transform.rotation * Vector3.forward * currentDistance + targetOffset);
    }
 }
