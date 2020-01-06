@@ -9,25 +9,13 @@ public enum WireframeMode {
 }
 
 public class Wireframe : MonoBehaviour {
-
-   public bool render_mesh_normaly = true;
-
-   public Color lineColor = new Color(0.0f, 1.0f, 1.0f);
-   public Color backgroundColor = new Color(0.0f, 0.5f, 0.5f);
-
-   public float lineWidth = 3;
-   public int size = 0;
-
-   private Vector3[] lines;
-   private ArrayList lines_List;
-   Mesh mesh;
-   public Material lineMaterial;
-
-
-   [SerializeField] Shader shader;
-
-   [SerializeField] float hoverOffset = 0.01f;
+   [SerializeField] Color lineColor = new Color(0.0f, 1.0f, 1.0f);
    [SerializeField] WireframeMode frameMode = WireframeMode.Full;
+   public float hoverOffset = 0.01f;
+
+   //public float lineWidth = 3;
+
+   Mesh mesh;
 
    bool shouldDraw = false;
 
@@ -42,12 +30,16 @@ public class Wireframe : MonoBehaviour {
 
    public void Init() {
       Start();
+      shouldDraw = true;
+      transform.Translate(0, hoverOffset, 0);
    }
 
-   public void Init(Vector3[] v, int[] t, int x, int z) {
+   public void Init(Vector3[] v, int[] t, int x, int z, float hoverOffset = 0.01f, WireframeMode mode = WireframeMode.Grid) {
       Start();
       SetParameters(v, t, x, z);
+      frameMode = mode;
       shouldDraw = true;
+      transform.Translate(0, hoverOffset, 0);
    }
 
    void SetParameters(Vector3[] v, int[] t, int x, int z) {
@@ -58,13 +50,11 @@ public class Wireframe : MonoBehaviour {
    }
 
    void Start() {
-      frameMode = WireframeMode.Full;
+      
    }
 
 
    void OnRenderObject() {
-      GetComponent<Renderer>().enabled = render_mesh_normaly;
-
       if (!shouldDraw)
          return;
 
@@ -147,17 +137,9 @@ public class Wireframe : MonoBehaviour {
          indices.Add(meshTriangles[i]);
       }
 
-      List<Color32> colors = new List<Color32>();
-
-      for (int i = 0; i < meshVertices.Length; i++) {
-         colors.Add(new Color32(125, 0, 15, 1));
-      }
-
       mesh.Clear();
       mesh.vertices = meshVertices;
       mesh.SetIndices(indices.ToArray(), MeshTopology.Lines, 0);
-      mesh.SetColors(colors);
-
    }
 
 }

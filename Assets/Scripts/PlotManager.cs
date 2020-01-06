@@ -22,7 +22,7 @@ public class PlotManager : MonoBehaviour {
    }
 
    void Start() {
-      //MakeAxes();
+      MakeAxes();
       AddPlot();
    }
 
@@ -47,7 +47,13 @@ public class PlotManager : MonoBehaviour {
 
    void DisplayAxis(GameObject obj) {
       PlotMeshT plotMesh = MeshGenerator.MakePlot(obj, -50, 50, -50, 50, 100, ShadingMode.heightmap);
-      obj.transform.Find("Mesh/Top").GetComponent<Wireframe>().Init(plotMesh.topMesh.vertices, plotMesh.topMesh.triangles, 50, 50);
+
+      Transform frameT = obj.transform.Find("Frame");
+      if (frameT == null) {
+         Debug.LogError("Object has no child with this name");
+         return;
+      }
+      frameT.GetComponent<Wireframe>().Init(plotMesh.topMesh.vertices, plotMesh.topMesh.triangles, 50, 50, 0, WireframeMode.Grid);
    }
 
    public void AddPlot() {

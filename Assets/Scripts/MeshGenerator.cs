@@ -102,7 +102,6 @@ public static class MeshGenerator {
       dest.Clear();
       dest.vertices = src.vertices;
       dest.triangles = src.triangles;
-      //dest.SetIndices(src.triangles, MeshTopology.LineStrip, 0);
       dest.normals = src.normals;
       dest.colors = src.colors;
    }
