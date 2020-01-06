@@ -93,74 +93,16 @@ public static class MeshGenerator {
       PlotMeshT ret = new PlotMeshT {
          topMesh = top,
          botMesh = bot,
-         framePositions = MakeFrame(vertices, numX, numZ)
       };
 
       return ret;
    }
 
-   static List<Vector3> MakeFrame(List<Vector3> vertices, int numX, int numZ) {
-      List<Vector3> frame = new List<Vector3>();
-      
-      int index;
-
-      // a horizontal zig-zag
-      for (int i = 0; i <= numX; i++) {
-         for (int j = 0; j <= numZ; j++) {
-            index = i * (numZ + 1) + j;
-            frame.Add(vertices[index]);
-         }
-         i++;
-         if (i == numX + 1) break;
-
-         for (int j = numZ; j >= 0; j--) {
-            index = i * (numZ + 1) + j;
-            frame.Add(vertices[index]);
-         }
-      }
-
-      //a vertical zig - zag
-      //if (numZ % 2 == 0) {
-      //   for (int i = numZ; i >= 0; i--) {
-      //      for (int j = numX; j >= 0; j--) {
-      //         index = i * (numZ + 1) + j;
-      //         frame.Add(vertices[index]);
-      //      }
-
-      //      i--;
-      //      if (i == -1) break;
-
-      //      for (int j = 0; j <= numX; j++) {
-      //         index = i * (numZ + 1) + j;
-      //         frame.Add(vertices[index]);
-      //      }
-
-      //   }
-      //} else {
-      //   for (int i = 0; i <= numZ; i++) {
-      //      for (int j = 0; j <= numX; j++) {
-      //         index = i * (numZ + 1) + j;
-      //         frame.Add(vertices[index]);
-      //      }
-
-      //      i++;
-      //      if (i == numX + 1) break;
-
-      //      for (int j = numX; j >= 0; j++) {
-      //         index = i * (numZ + 1) + j;
-      //         frame.Add(vertices[index]);
-      //      }
-      //   }
-      //}
-
-      return frame;
-   }
-
-
    public static void CopyMesh(Mesh dest, Mesh src) {
       dest.Clear();
       dest.vertices = src.vertices;
       dest.triangles = src.triangles;
+      //dest.SetIndices(src.triangles, MeshTopology.LineStrip, 0);
       dest.normals = src.normals;
       dest.colors = src.colors;
    }

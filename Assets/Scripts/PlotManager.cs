@@ -7,6 +7,8 @@ public class PlotManager : MonoBehaviour {
 
    [SerializeField] GameObject plotList;
    [SerializeField] Transform plotsParent;
+   [SerializeField] Transform axesParent;
+
 
    UIPlotList UIPlotList;
 
@@ -20,7 +22,32 @@ public class PlotManager : MonoBehaviour {
    }
 
    void Start() {
+      //MakeAxes();
       AddPlot();
+   }
+
+   void MakeAxes() {
+      GameObject xyAxis = Instantiate(defaultMesh);
+      xyAxis.GetComponent<Plot>().equation = Parser.Parse("0");
+      xyAxis.transform.SetParent(axesParent);
+      DisplayAxis(xyAxis);
+
+      GameObject yzAxis = Instantiate(defaultMesh);
+      yzAxis.GetComponent<Plot>().equation = Parser.Parse("0");
+      yzAxis.transform.SetParent(axesParent);
+      DisplayAxis(yzAxis);
+      yzAxis.transform.Rotate(new Vector3(0, 0, 90), Space.Self);
+
+      GameObject xzAxis = Instantiate(defaultMesh);
+      xzAxis.GetComponent<Plot>().equation = Parser.Parse("0");
+      xzAxis.transform.SetParent(axesParent);
+      DisplayAxis(xzAxis);
+      xzAxis.transform.Rotate(new Vector3(90, 0, 0), Space.Self);
+   }
+
+   void DisplayAxis(GameObject obj) {
+      PlotMeshT plotMesh = MeshGenerator.MakePlot(obj, -50, 50, -50, 50, 100, ShadingMode.heightmap);
+      obj.transform.Find("Mesh/Top").GetComponent<Wireframe>().Init(plotMesh.topMesh.vertices, plotMesh.topMesh.triangles, 50, 50);
    }
 
    public void AddPlot() {
