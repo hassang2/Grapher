@@ -11,7 +11,7 @@ public class CamControls : MonoBehaviour {
    public Vector3 targetOffset;
    public float distance = 5.0f;
    public float maxDistance = 20;
-   public float minDistance = .6f;
+   public float minDistance = 5;
    public float xSpeed = 200.0f;
    public float ySpeed = 200.0f;
    public int yMinLimit = -80;
@@ -73,10 +73,9 @@ public class CamControls : MonoBehaviour {
 
       // Zooming
       desiredDistance -= Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * zoomRate * Mathf.Abs(desiredDistance);
+      
+      desiredDistance = Mathf.Clamp(desiredDistance, minDistance, maxDistance);
 
-      //if (Mathf.Abs(desiredDistance - currentDistance) <= 0.01f) {
-      //   target.Translate((target.position - transform.position) * Mathf.Sign(desiredDistance - currentDistance));
-      //}
       currentDistance = Mathf.Lerp(currentDistance, desiredDistance, Time.deltaTime * zoomDampening);
 
       // calculate position based on the new currentDistance

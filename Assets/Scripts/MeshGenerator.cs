@@ -35,7 +35,7 @@ public static class MeshGenerator {
       List<int> faces = new List<int>();
       List<Color32> colors = new List<Color32>();
 
-      Function func = obj.GetComponent<Plot>().equation;
+      Function func = obj.GetComponent<Plot>().Equation;
       for (int i = 0; i <= numX; i++) {
          for (int j = 0; j <= numZ; j++) {
             Vector3 newVertex = obj.transform.InverseTransformVector(new Vector3(curX, (float)func.calculate(curX, curZ), curZ));

@@ -29,18 +29,18 @@ public class PlotManager : MonoBehaviour {
 
    void MakeAxes() {
       GameObject xyAxis = Instantiate(defaultMesh);
-      xyAxis.GetComponent<Plot>().equation = Parser.Parse("0");
+      xyAxis.GetComponent<Plot>().Equation = Parser.Parse("0");
       xyAxis.transform.SetParent(axesParent);
       DisplayAxis(xyAxis);
 
       GameObject yzAxis = Instantiate(defaultMesh);
-      yzAxis.GetComponent<Plot>().equation = Parser.Parse("0");
+      yzAxis.GetComponent<Plot>().Equation = Parser.Parse("0");
       yzAxis.transform.SetParent(axesParent);
       DisplayAxis(yzAxis);
       yzAxis.transform.Rotate(new Vector3(0, 0, 90), Space.Self);
 
       GameObject xzAxis = Instantiate(defaultMesh);
-      xzAxis.GetComponent<Plot>().equation = Parser.Parse("0");
+      xzAxis.GetComponent<Plot>().Equation = Parser.Parse("0");
       xzAxis.transform.SetParent(axesParent);
       DisplayAxis(xzAxis);
       xzAxis.transform.Rotate(new Vector3(90, 0, 0), Space.Self);
@@ -64,6 +64,6 @@ public class PlotManager : MonoBehaviour {
 
       InputField input = UIPlotList.AddEmptyPlot(newPlotMesh);
 
-      newPlotMesh.GetComponent<Plot>().input = input;
+      newPlotMesh.GetComponent<Plot>().Input = input;
    }
 }

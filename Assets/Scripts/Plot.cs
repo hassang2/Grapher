@@ -4,8 +4,8 @@ using org.mariuszgromada.math.mxparser;
 
 public class Plot : MonoBehaviour {
 
-   public Function equation { get; set; }
-   public InputField input { get; set; }
+   public Function Equation { get; set; }
+   public InputField Input { get; set; }
 
    Mesh topMesh;
    Mesh botMesh;
@@ -21,11 +21,13 @@ public class Plot : MonoBehaviour {
    }
 
    public void Display() {
-      Display(input.text);
+      Display(Input.text);
    }
 
    public void Display(string inpTxt) {
-      equation = Parser.Parse(inpTxt);
+      Equation = Parser.Parse(inpTxt);
+      if (Equation == null)
+         return;
 
       PlotMeshT plotMesh = MeshGenerator.MakePlot(gameObject, -10, 10, -10, 10, 100, ShadingMode.heightmap);
 
