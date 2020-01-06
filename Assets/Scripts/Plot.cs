@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using org.mariuszgromada.math.mxparser;
+using System.Collections;
 
 public class Plot : MonoBehaviour {
 
    public Function Equation { get; set; }
    public InputField Input { get; set; }
+
+   readonly float displayDelay = 0.5f;
+   float displayTimer = 0.0f;
+   bool isWaiting = false;
 
    Mesh topMesh;
    Mesh botMesh;
@@ -18,6 +23,19 @@ public class Plot : MonoBehaviour {
       botMesh = transform.Find("Mesh/Bot").GetComponent<MeshFilter>().mesh;
 
       frame = transform.Find("Frame").GetComponent<Wireframe>();
+
+     
+   }
+
+   void Update() {
+      if (isWaiting) {
+         displayTimer += Time.deltaTime;
+
+         if (displayTimer >= displayDelay) {
+            isWaiting = false;
+            Display();
+         }
+      }
    }
 
    public void Display() {
@@ -35,6 +53,11 @@ public class Plot : MonoBehaviour {
       MeshGenerator.CopyMesh(botMesh, plotMesh.botMesh);
 
       frame.Init(plotMesh.topMesh.vertices, plotMesh.topMesh.triangles, 50, 50);
+   }
+
+   public void RestartDisplayTimer() {
+      isWaiting = true;
+      displayTimer = 0;
    }
 
 }

@@ -64,6 +64,8 @@ public class PlotManager : MonoBehaviour {
 
       InputField input = UIPlotList.AddEmptyPlot(newPlotMesh);
 
-      newPlotMesh.GetComponent<Plot>().Input = input;
+      Plot plt = newPlotMesh.GetComponent<Plot>();
+      plt.Input = input;
+      plt.Input.onValueChanged.AddListener(delegate { plt.RestartDisplayTimer(); });
    }
 }
