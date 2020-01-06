@@ -29,13 +29,11 @@ public class Wireframe : MonoBehaviour {
    }
 
    public void Init() {
-      Start();
       shouldDraw = true;
       transform.Translate(0, hoverOffset, 0);
    }
 
    public void Init(Vector3[] v, int[] t, int x, int z, float hoverOffset = 0.01f, WireframeMode mode = WireframeMode.Grid) {
-      Start();
       SetParameters(v, t, x, z);
       frameMode = mode;
       shouldDraw = true;

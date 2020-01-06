@@ -93,6 +93,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineColor: {r: 0.990566, g: 0.45375946, b: 0, a: 1}
   frameMode: 1
+  hoverOffset: 0.01
 --- !u!1 &8704587468573376460
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,7 +307,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 54e05ea11725dce4791f90960672ddb6, type: 2}
+  - {fileID: 2100000, guid: 0ac0d48edbb2e4c44b18bc5bbf4de534, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -341,3 +342,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineColor: {r: 0, g: 1, b: 1, a: 1}
   frameMode: 1
+  hoverOffset: 0.01

@@ -8,6 +8,7 @@ public class PlotManager : MonoBehaviour {
    [SerializeField] GameObject plotList;
    [SerializeField] Transform plotsParent;
    [SerializeField] Transform axesParent;
+   [SerializeField] Material axesMat;
 
 
    UIPlotList UIPlotList;
@@ -54,6 +55,7 @@ public class PlotManager : MonoBehaviour {
          return;
       }
       frameT.GetComponent<Wireframe>().Init(plotMesh.topMesh.vertices, plotMesh.topMesh.triangles, 50, 50, 0, WireframeMode.Grid);
+      frameT.GetComponent<Renderer>().material = axesMat;
    }
 
    public void AddPlot() {

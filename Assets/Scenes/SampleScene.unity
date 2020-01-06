@@ -928,6 +928,7 @@ MonoBehaviour:
   plotList: {fileID: 608341143}
   plotsParent: {fileID: 685503180}
   axesParent: {fileID: 2105406637}
+  axesMat: {fileID: 2100000, guid: 54e05ea11725dce4791f90960672ddb6, type: 2}
 --- !u!4 &1350573410
 Transform:
   m_ObjectHideFlags: 0

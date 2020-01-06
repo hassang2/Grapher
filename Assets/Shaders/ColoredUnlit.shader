@@ -1,12 +1,19 @@
 ﻿Shader "ColoredUnlit" {
  
 	Properties {
-		_Color ("Color", Color) = (1,1,1)
+		_Color ("Color", Color) = (0, 0, 0, 0.5)
 	}
  
 	SubShader {
 		Color [_Color]
-		Pass {}
+		Lighting Off
+        ZWrite Off
+        Cull Back
+		Blend SrcAlpha OneMinusSrcAlpha
+		Tags {"Queue" = "Transparent"}
+
+		Pass {
+		}
 	}
  
 }
