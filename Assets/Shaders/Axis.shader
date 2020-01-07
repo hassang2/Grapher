@@ -1,4 +1,4 @@
-﻿Shader "Lines/Colored Blended" {
+﻿Shader "Axis" {
 	SubShader { 
 		Pass {
 			BindChannels { Bind "Color",color }

@@ -47,7 +47,7 @@ public class PlotManager : MonoBehaviour {
    }
 
    void DisplayAxis(GameObject obj) {
-      PlotMeshT plotMesh = MeshGenerator.MakePlot(obj, -50, 50, -50, 50, 100, ShadingMode.heightmap);
+      PlotMeshT plotMesh = MeshGenerator.MakePlot(obj, -25, 25, -25, 25, 100, ShadingMode.heightmap);
 
       Transform frameT = obj.transform.Find("Frame");
       if (frameT == null) {
