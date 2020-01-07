@@ -12,8 +12,8 @@ public class CamControls : MonoBehaviour {
    public float distance = 5.0f;
    public float maxDistance = 20;
    public float minDistance = 5;
-   public float xSpeed = 200.0f;
-   public float ySpeed = 200.0f;
+   public float rotateSpeed = 200.0f;
+   public float moveSpeed = 100.0f;
    public int yMinLimit = -80;
    public int yMaxLimit = 80;
    public int zoomRate = 40;
@@ -50,25 +50,31 @@ public class CamControls : MonoBehaviour {
    /*
     * Camera logic on LateUpdate to only update after all character movement logic has been handled. 
     */
-   void LateUpdate() {
+   void Update() {
       if (Input.GetMouseButton(0)) {
-         xDeg += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
-         yDeg -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
+         xDeg += Input.GetAxis("Mouse X") * rotateSpeed;
+         yDeg -= Input.GetAxis("Mouse Y") * rotateSpeed;
 
-         // set camera rotation 
-         desiredRotation = Quaternion.Euler(yDeg, xDeg, 0);
-         //desiredRotation = Quaternion.rot
+         desiredRotation = Quaternion.Euler(Input.GetAxis("Mouse Y") * rotateSpeed, Input.GetAxis("Mouse X") * rotateSpeed, 0) * transform.rotation;
+
+         Quaternion origRotation = transform.rotation;
+
+         transform.RotateAround(transform.position, transform.rotation * Vector3.up, Input.GetAxis("Mouse X") * rotateSpeed);
+         transform.RotateAround(transform.position, transform.rotation * Vector3.left, Input.GetAxis("Mouse Y") * rotateSpeed);
+
+         desiredRotation = transform.rotation;
+         transform.rotation = origRotation;
 
       } else if(Input.GetMouseButton(1)) {
-         float xMove = Input.GetAxis("Mouse X");
-         float yMove = Input.GetAxis("Mouse Y");
+         float xMove = Input.GetAxis("Mouse X") * moveSpeed;
+         float yMove = Input.GetAxis("Mouse Y") * moveSpeed;
 
          Vector3 move = (transform.rotation * Vector3.left).normalized * xMove + (transform.rotation * Vector3.down).normalized * yMove;
 
          target.Translate(move); 
       }
 
-      // Apply rotation
+      // Apply rotation smoothing
       transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, Time.deltaTime * zoomDampening);
 
       // Zooming

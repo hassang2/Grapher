@@ -719,8 +719,8 @@ MonoBehaviour:
   distance: 5
   maxDistance: 100
   minDistance: 1
-  xSpeed: 300
-  ySpeed: 300
+  rotateSpeed: 22
+  moveSpeed: 0.5
   yMinLimit: -80
   yMaxLimit: 80
   zoomRate: 50
