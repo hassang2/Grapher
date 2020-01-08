@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Axes : MonoBehaviour {
+public class MainAxes : MonoBehaviour {
    public Color lineColor = new Color(0.0f, 1.0f, 1.0f);
    [SerializeField] float lineWidth = 30;
 

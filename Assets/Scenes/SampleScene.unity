@@ -3483,7 +3483,7 @@ MonoBehaviour:
   plotList: {fileID: 608341143}
   plotsParent: {fileID: 685503180}
   axesParent: {fileID: 2105406637}
-  axesMat: {fileID: 2100000, guid: 54e05ea11725dce4791f90960672ddb6, type: 2}
+  axesMat: {fileID: 2100000, guid: bcd255382723f7940b8c701af24f68b6, type: 2}
 --- !u!4 &1350573410
 Transform:
   m_ObjectHideFlags: 0
@@ -7495,5 +7495,5 @@ MonoBehaviour:
   lineColor: {r: 0, g: 1, b: 1, a: 1}
   lineWidth: 50
   lineMaterial: {fileID: 0}
-  shader: {fileID: 4800000, guid: b812d17a7134a1b48b000c1f7e3fdce4, type: 3}
+  shader: {fileID: 4800000, guid: ce7e78841f3256749bed694538b6428d, type: 3}
   length: 50

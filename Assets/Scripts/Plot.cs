@@ -15,16 +15,17 @@ public class Plot : MonoBehaviour {
    Mesh topMesh;
    Mesh botMesh;
 
-   Wireframe frame;
+   Wireframe topFrame;
+   Wireframe botFrame;
 
    // Start is called before the first frame update
    void Awake() {
       topMesh = transform.Find("Mesh/Top").GetComponent<MeshFilter>().mesh;
       botMesh = transform.Find("Mesh/Bot").GetComponent<MeshFilter>().mesh;
 
-      frame = transform.Find("Frame").GetComponent<Wireframe>();
+      topFrame = transform.Find("TopFrame").GetComponent<Wireframe>();
+      botFrame = transform.Find("BotFrame").GetComponent<Wireframe>();
 
-     
    }
 
    void Update() {
@@ -52,7 +53,8 @@ public class Plot : MonoBehaviour {
       MeshGenerator.CopyMesh(topMesh, plotMesh.topMesh);
       MeshGenerator.CopyMesh(botMesh, plotMesh.botMesh);
 
-      frame.Init(plotMesh.topMesh.vertices, plotMesh.topMesh.triangles, 50, 50);
+      topFrame.Init(plotMesh.topMesh.vertices, plotMesh.topMesh.triangles, 50, 50);
+      botFrame.Init(plotMesh.botMesh.vertices, plotMesh.topMesh.triangles, 50, 50, hoverOffset: -0.01f);
    }
 
    public void RestartDisplayTimer() {

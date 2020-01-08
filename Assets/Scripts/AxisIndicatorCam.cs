@@ -1,10 +1,6 @@
 ﻿using UnityEngine;
 
 public class AxisIndicatorCam : MonoBehaviour {
-   // Start is called before the first frame update
-
-   CamControls mainCam;
-
    Quaternion desiredRotation;
 
    [SerializeField] float rotationSmoothing = 5.0f;
@@ -15,10 +11,8 @@ public class AxisIndicatorCam : MonoBehaviour {
       desiredRotation = transform.rotation;
    }
 
-   // Update is called once per frame
    void Update() {
       transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, Time.deltaTime * rotationSmoothing);
-
       transform.position = indicatorPos.position - (transform.rotation * Vector3.forward * distance);
    }
 

@@ -1,9 +1,10 @@
-﻿Shader "Axis" {
+﻿
+Shader "MainAxis" {
 	SubShader { 
 		Pass {
 			BindChannels { Bind "Color",color }
 			Blend SrcAlpha OneMinusSrcAlpha
-			ZWrite on Cull front Fog { Mode Off }
+			ZWrite On Cull Front Fog { Mode Off }
 		} 
 	} 
 }

@@ -49,7 +49,7 @@ public class PlotManager : MonoBehaviour {
    void DisplayAxis(GameObject obj) {
       PlotMeshT plotMesh = MeshGenerator.MakePlot(obj, -25, 25, -25, 25, 100, ShadingMode.heightmap);
 
-      Transform frameT = obj.transform.Find("Frame");
+      Transform frameT = obj.transform.Find("TopFrame");
       if (frameT == null) {
          Debug.LogError("Object has no child with this name");
          return;

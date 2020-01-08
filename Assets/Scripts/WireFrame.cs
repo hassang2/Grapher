@@ -13,11 +13,7 @@ public class Wireframe : MonoBehaviour {
    [SerializeField] WireframeMode frameMode = WireframeMode.Full;
    public float hoverOffset = 0.01f;
 
-   //public float lineWidth = 3;
-
    Mesh mesh;
-
-   bool shouldDraw = false;
 
    Vector3[] meshVertices;
    int[] meshTriangles;
@@ -29,15 +25,15 @@ public class Wireframe : MonoBehaviour {
    }
 
    public void Init() {
-      shouldDraw = true;
       transform.Translate(0, hoverOffset, 0);
+      Draw();
    }
 
    public void Init(Vector3[] v, int[] t, int x, int z, float hoverOffset = 0.01f, WireframeMode mode = WireframeMode.Grid) {
       SetParameters(v, t, x, z);
       frameMode = mode;
-      shouldDraw = true;
       transform.Translate(0, hoverOffset, 0);
+      Draw();
    }
 
    void SetParameters(Vector3[] v, int[] t, int x, int z) {
@@ -47,15 +43,7 @@ public class Wireframe : MonoBehaviour {
       numZ = z;
    }
 
-   void Start() {
-      
-   }
-
-
-   void OnRenderObject() {
-      if (!shouldDraw)
-         return;
-
+   void Draw() {
       if (frameMode == WireframeMode.Full)
          FullWireframe();
       else if (frameMode == WireframeMode.Grid)
