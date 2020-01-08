@@ -7,18 +7,19 @@ using System.Collections;
 
 [AddComponentMenu("Camera-Control/3dsMax Camera Style")]
 public class CamControls : MonoBehaviour {
-   public Transform target;
-   public Vector3 targetOffset;
-   public float distance = 5.0f;
-   public float maxDistance = 20;
-   public float minDistance = 5;
-   public float rotateSpeed = 200.0f;
-   public float moveSpeed = 100.0f;
-   public int yMinLimit = -80;
-   public int yMaxLimit = 80;
-   public int zoomRate = 40;
-   public float panSpeed = 0.3f;
-   public float zoomDampening = 5.0f;
+   [SerializeField] Transform target;
+   [SerializeField] Vector3 targetOffset;
+   [SerializeField] float distance = 5.0f;
+   [SerializeField] float maxDistance = 20;
+   [SerializeField] float minDistance = 5;
+   [SerializeField] float rotateSpeed = 200.0f;
+   [SerializeField] float moveSpeed = 100.0f;
+   [SerializeField] int yMinLimit = -80;
+   [SerializeField] int yMaxLimit = 80;
+   [SerializeField] int zoomRate = 40;
+   [SerializeField] float zoomDampening = 5.0f;
+
+   [SerializeField] AxisIndicatorCam axisCam;
 
    private float xDeg = 0.0f;
    private float yDeg = 0.0f;
@@ -62,6 +63,7 @@ public class CamControls : MonoBehaviour {
          transform.RotateAround(transform.position, transform.rotation * Vector3.up, Input.GetAxis("Mouse X") * rotateSpeed);
          transform.RotateAround(transform.position, transform.rotation * Vector3.left, Input.GetAxis("Mouse Y") * rotateSpeed);
 
+         axisCam.SetRotattion(transform.rotation);
          desiredRotation = transform.rotation;
          transform.rotation = origRotation;
 
