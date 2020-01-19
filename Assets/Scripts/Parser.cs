@@ -10,19 +10,20 @@ public static class Parser {
 
    const string operators = "-=*/^";
 
-   public static Function Parse(string exp) {
+   public static Tuple<Function, Function> Parse(string exp) {
       string normalized = Normalize(exp);
 
       if (normalized.Length == 0)
          return null;
 
       Function function = new Function("f(x,y) = " + normalized);
+      Function indicatorFunction = new Function("f(x,y,z) = z - " + normalized);
 
       if (!function.checkSyntax()) {
          Debug.LogError("Invalid equation");
          return null;
       }
-      return function;
+      return new Tuple<Function, Function>(function, indicatorFunction);
    }
 
    static string Normalize(string exp) {

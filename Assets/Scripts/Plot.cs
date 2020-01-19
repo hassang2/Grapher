@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using org.mariuszgromada.math.mxparser;
-using System.Collections;
+using System;
 
 public class Plot : MonoBehaviour {
 
    public Function Equation { get; set; }
    public InputField Input { get; set; }
+
+   public Function IndicatorEquation { get; set; }
 
    readonly float displayDelay = 0.5f;
    float displayTimer = 0.0f;
@@ -18,6 +20,10 @@ public class Plot : MonoBehaviour {
    Wireframe topFrame;
    Wireframe botFrame;
 
+   public Tuple<float, float> XBound { get; set; }
+   public Tuple<float, float> YBound { get; set; }
+   public Tuple<float, float> ZBound { get; set; }
+
    // Start is called before the first frame update
    void Awake() {
       topMesh = transform.Find("Mesh/Top").GetComponent<MeshFilter>().mesh;
@@ -25,6 +31,8 @@ public class Plot : MonoBehaviour {
 
       topFrame = transform.Find("TopFrame").GetComponent<Wireframe>();
       botFrame = transform.Find("BotFrame").GetComponent<Wireframe>();
+
+      Equation = null;
 
    }
 
@@ -44,11 +52,15 @@ public class Plot : MonoBehaviour {
    }
 
    public void Display(string inpTxt) {
-      Equation = Parser.Parse(inpTxt);
+      Tuple<Function, Function> Equations = Parser.Parse(inpTxt);
+
+      Equation = Equations.Item1;
+      IndicatorEquation = Equations.Item2;
+
       if (Equation == null)
          return;
 
-      PlotMeshT plotMesh = MeshGenerator.MakePlot(gameObject, -10, 10, -10, 10, 100, ShadingMode.heightmap);
+      PlotMeshT plotMesh = MeshGenerator.MakePlot(gameObject, XBound, ZBound, 100, ShadingMode.heightmap);
 
       MeshGenerator.CopyMesh(topMesh, plotMesh.topMesh);
       MeshGenerator.CopyMesh(botMesh, plotMesh.botMesh);

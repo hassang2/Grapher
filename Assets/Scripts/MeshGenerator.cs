@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using org.mariuszgromada.math.mxparser;
@@ -18,9 +18,9 @@ public static class MeshGenerator {
     *
     * smoothness = numX + numY
     */
-   public static PlotMeshT MakePlot(GameObject obj, float minX, float maxX, float minZ, float maxZ, int smoothness, ShadingMode mode) {
-      float diffX = maxX - minX;
-      float diffZ = maxZ - minZ;
+   public static PlotMeshT MakePlot(GameObject obj, Tuple<float, float> xBound, Tuple<float, float> zBound, int smoothness, ShadingMode mode) {
+      float diffX = xBound.Item2 - xBound.Item1;
+      float diffZ = zBound.Item2 - zBound.Item1;
 
       int numX = (int)(diffX * smoothness / (diffX + diffZ));
       int numZ = smoothness - numX;
@@ -28,8 +28,8 @@ public static class MeshGenerator {
       float deltaX = diffX / numX;
       float deltaZ = diffZ / numZ;
 
-      float curX = minX;
-      float curZ = minZ;
+      float curX = xBound.Item1;
+      float curZ = zBound.Item1;
 
       List<Vector3> vertices = new List<Vector3>();
       List<int> faces = new List<int>();
@@ -45,7 +45,7 @@ public static class MeshGenerator {
 
             curX += deltaX;
          }
-         curX = minX;
+         curX = xBound.Item1;
          curZ += deltaZ;
       }
 
