@@ -339,7 +339,7 @@ GameObject:
   - component: {fileID: 6989009988350312026}
   - component: {fileID: 2167344882850927750}
   - component: {fileID: 1727681903910026498}
-  - component: {fileID: 8156507256335022722}
+  - component: {fileID: 927205209449194881}
   m_Layer: 0
   m_Name: TopFrame
   m_TagString: Untagged
@@ -407,7 +407,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &8156507256335022722
+--- !u!114 &927205209449194881
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -420,5 +420,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineColor: {r: 0, g: 1, b: 1, a: 1}
-  frameMode: 1
+  frameMode: 0
   hoverOffset: 0.01

@@ -8,6 +8,7 @@ public class ValueIndicator {
    List<Plot> plots;
 
    [SerializeField] float interval = 0.1f;
+   [SerializeField] float tolerance = 0.001f;
 
    public ValueIndicator() {
       plots = new List<Plot>();
@@ -27,6 +28,7 @@ public class ValueIndicator {
             continue;
          
          Vector3 thisPoint = GetIntersection(plots[i], mousePosition);
+
          if (thisPoint == Vector3.positiveInfinity)
             continue;
 
@@ -38,8 +40,8 @@ public class ValueIndicator {
          }
       }
 
-      //if (minDistance != float.MaxValue)
-      //   Debug.Log("point is: " + point.ToString());
+      if (minDistance != float.MaxValue)
+         Debug.Log("point is: " + point.ToString());
 
    }
 
@@ -68,10 +70,10 @@ public class ValueIndicator {
       Vector3 s = endPoints.Item1;
       Vector3 e = endPoints.Item2;
 
-      Debug.Log("start: " + ray.origin.ToString());
-      Debug.Log("direction: " + ray.direction.ToString());
-      Debug.Log("s: " + endPoints.Item1.ToString());
-      Debug.Log("e: " + endPoints.Item2.ToString());
+      //Debug.Log("start: " + ray.origin.ToString());
+      //Debug.Log("direction: " + ray.direction.ToString());
+      //Debug.Log("s: " + endPoints.Item1.ToString());
+      //Debug.Log("e: " + endPoints.Item2.ToString());
 
       float t = interval;
       Vector3 diff = e - s;
@@ -81,8 +83,10 @@ public class ValueIndicator {
       while (t <= 1) {
          float val1 = GetFunctionValue(s, diff, t, plt.IndicatorEquation);
          if (Mathf.Sign(val0) != Mathf.Sign(val1)) {
-            Debug.Log("EYYY");
-            return RegulaFalsi(0, t, plt);
+
+            float ret = RegulaFalsi(s, diff, 0, t, plt);
+            Debug.Log(ret);
+            return s + ret * diff;
          }
 
          t += interval;
@@ -165,8 +169,32 @@ public class ValueIndicator {
              point[2] >= plt.ZBound.Item1 && point[2] <= plt.ZBound.Item2;
    }
 
-   Vector3 RegulaFalsi(float x0, float x1, Plot plt) {
-      return Vector3.zero;
+   float RegulaFalsi(Vector3 start, Vector3 diff, float x0, float x1, Plot plt) {
+      float a = x0;
+      float b = x1;
+      float c;
+      Function eqn = plt.IndicatorEquation;
+
+      float fa = GetFunctionValue(start, diff, a, eqn);
+      float fb = GetFunctionValue(start, diff, b, eqn);
+      float fc;
+
+      if (fa * fb > 0) {
+         Debug.LogError("Bad Initial guesses");
+         return -1;
+      }
+      do {
+         c = b - ((fb * (b - a)) / (fb - fa));
+         fc = GetFunctionValue(start, diff, c, eqn);
+
+         if (fa * fc < 0)
+            b = c;
+         else
+            a = c;
+
+      } while (Mathf.Abs(fc) > tolerance);
+
+      return c;
    }
 
    public void AddPlot(Plot newPlot) {
